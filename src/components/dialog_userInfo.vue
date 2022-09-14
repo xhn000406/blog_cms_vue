@@ -6,10 +6,31 @@
       width="30%"
       center
     >
-      <span
-        >It should be noted that the content will not be aligned in center by
-        default</span
-      >
+      <div class="container">
+        <div class="avatar">
+          <el-upload
+            :auto-upload="false"
+            class="elUpload"
+            ref="uploadRef"
+            list-type="picture-card"
+            :show-file-list="true"
+            :on-remove="handleRemove"
+          >
+            <el-icon><Plus /></el-icon>
+          </el-upload>
+        </div>
+        <div class="info">
+          <el-form
+            label-width="100px"
+            v-model="formLabelAlign"
+            style="max-width: 460px"
+          >
+            <el-form-item label="昵称">
+              <el-input v-model="formLabelAlign.nickName" />
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
       <template #footer>
         <span class="dialog-footer">
           <el-button
@@ -18,17 +39,9 @@
                 emits('emitCenterDialogVisible', false)
               }
             "
-            >Cancel</el-button
+            >取消</el-button
           >
-          <el-button
-            type="primary"
-            @click="
-              () => {
-                emits('emitCenterDialogVisible', false)
-              }
-            "
-            >Confirm</el-button
-          >
+          <el-button type="primary" @click="saveItem">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -36,7 +49,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, reactive } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 
 const emits = defineEmits(['emitCenterDialogVisible'])
 
@@ -45,6 +59,12 @@ const props = defineProps({
     type: Boolean
   }
 })
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+const uploadRef = ref()
+const formLabelAlign = reactive({
+  nickName: ''
+})
 
 watch(
   () => props.centerDialogVisible,
@@ -52,6 +72,41 @@ watch(
     emits('emitCenterDialogVisible', newValue)
   }
 )
+
+const handleRemove = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const saveItem = () => {
+  emits('emitCenterDialogVisible', false)
+  console.log(uploadRef)
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  background-color: beige;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.info {
+  width: 100%;
+  height: 100%;
+  background-color: blanchedalmond;
+}
+.elUpload {
+  border-radius: 50% !important;
+}
+</style>

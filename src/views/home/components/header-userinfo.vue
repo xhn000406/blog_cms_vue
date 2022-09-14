@@ -9,14 +9,6 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item @click="changeIsShow">个人信息</el-dropdown-item>
-          <DialogUserInfo
-            :centerDialogVisible="isShow"
-            @emitCenterDialogVisible="
-              (e) => {
-                isShow = e
-              }
-            "
-          ></DialogUserInfo>
           <el-dropdown-item @click="backInfo">返回主页</el-dropdown-item>
           <el-divider />
           <el-dropdown-item @click="exitLogin">退出登陆</el-dropdown-item>
@@ -31,15 +23,15 @@ import { ref } from 'vue'
 import { ArrowDown, User } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '../../../utils/login'
-import DialogUserInfo from '../../../components/dialog_userInfo.vue'
+// import DialogUserInfo from '../../../components/dialog_userInfo.vue'
 
 const store = useStore()
 const router = useRouter()
 
-const isShow = ref(false)
+// const isShow = ref(false)
 
 const changeIsShow = () => {
-  isShow.value = true
+  router.push('/home/auth/info')
 }
 
 const exitLogin = () => {

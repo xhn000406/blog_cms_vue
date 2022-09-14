@@ -19,8 +19,10 @@
 <script setup lang="ts">
 import HnMenu, { MenuData } from '../../base-ui/hn-menu/index'
 import { provide } from 'vue'
-
 import HeaderContainer from './components/header-container.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 provide('menuData', MenuData)
 </script>

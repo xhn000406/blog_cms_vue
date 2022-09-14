@@ -41,6 +41,11 @@ const routes = [
         path: 'shop/album',
         name: 'shopalbum',
         component: () => import('../views/system/shop/album/index.vue')
+      },
+      {
+        path: 'auth/info',
+        name: 'authInfo',
+        component: () => import('../views/userInfo/index.vue')
       }
     ]
   }

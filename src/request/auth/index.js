@@ -7,3 +7,11 @@ export function apiGetAuthData(data) {
     data
   })
 }
+
+export function UpdateUserAvatar(id, data) {
+  return httpRequest({
+    url: `/userAvatar/${id}`,
+    method: 'post',
+    data
+  })
+}
