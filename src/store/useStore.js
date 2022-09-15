@@ -11,9 +11,9 @@ export const useStore = defineStore('main', {
   actions: {
     async loginAuth(e) {
       const { data: res } = await apiGetAuthData(e)
-      console.log(res)
       localUtil.saveLocal('username', res.username)
       localUtil.saveLocal('token', res.token)
+      localUtil.saveLocal('id', res.id)
     }
   }
 })

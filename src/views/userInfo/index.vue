@@ -10,7 +10,7 @@
               ref="elUploadRef"
               :auto-upload="false"
               class="avatar-uploader"
-              :before-upload="demo"
+              :before-upload="beforeUpload"
               :http-request="uploadHttpRequest"
               :show-file-list="false"
             >
@@ -22,13 +22,13 @@
           <div class="fromData">
             <el-form label-width="100px" :model="form" style="max-width: 460px">
               <el-form-item label="昵称">
-                <el-input v-model="form.name" />
+                <el-input v-model="form.nickName" />
               </el-form-item>
               <el-form-item label="qq邮箱">
-                <el-input v-model="form.region" />
+                <el-input v-model="form.hotMail" />
               </el-form-item>
               <el-form-item label="简介">
-                <el-input v-model="form.desc" type="textarea" />
+                <el-input v-model="form.introduction" type="textarea" />
               </el-form-item>
             </el-form>
           </div>
@@ -45,39 +45,52 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElUpload } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { UpdateUserAvatar } from '../../request/auth'
+import { useStore } from '../../store/authStore'
 
 let elUploadRef = ref()
-let avatar = ref()
-const form = reactive({
-  name: '',
-  region: '',
-  type: '',
-  desc: ''
-})
-const imageUrl = ref('')
+let avatar = ref('')
 
-const uploadHttpRequest = () => {
+let form = reactive({
+  nickName: '',
+  hotMail: '',
+  introduction: '',
+  fileName: ''
+})
+
+const imageUrl = ref('')
+const store = useStore()
+const uploadHttpRequest = async () => {
   const formData = new FormData()
   formData.append('avatar', avatar.value)
-  console.log(formData)
-  UpdateUserAvatar(1, formData)
+  await store.upDateInfo(formData, form)
 }
 
-const demo = (file) => {
+const beforeUpload = (file) => {
   avatar.value = file
-  console.log(avatar.value)
 }
 
 const onSubmit = async () => {
   await elUploadRef.value.submit()
 }
+console.log(imageUrl)
+onMounted(async () => {
+  await store.getInfoData()
+  form.hotMail = store.hotMail
+  form.nickName = store.nickName
+  form.introduction = store.introduction
+  form.fileName = store.fileName
+  imageUrl.value = store.fileName
+})
 </script>
 
 <style lang="less" scoped>
+.avatar {
+  width: 300px;
+  height: 300px;
+}
 .title {
   padding-top: 10px;
   font-size: 24px;

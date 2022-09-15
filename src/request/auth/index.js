@@ -8,9 +8,16 @@ export function apiGetAuthData(data) {
   })
 }
 
-export function UpdateUserAvatar(id, data) {
+export function getUserInfoData(id) {
   return httpRequest({
-    url: `/userAvatar/${id}`,
+    url: `/userInfo/${id}`,
+    method: 'get'
+  })
+}
+
+export function UpdateUserData(id, data) {
+  return httpRequest({
+    url: `/userInfo/${id}`,
     method: 'post',
     data
   })

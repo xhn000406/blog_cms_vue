@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElNotification } from 'element-plus'
+import { localUtil } from '../utils/localUtil'
 
 // 创建一个 axios 实例
 const service = axios.create({
@@ -9,8 +10,8 @@ const service = axios.create({
   headers: {
     // 设置后端需要的传参类型
     'Content-Type': 'application/json',
-    token: 'your token',
-    'X-Requested-With': 'XMLHttpRequest'
+    'X-Requested-With': 'XMLHttpRequest',
+    'authorization': 'Bearer ' + localUtil.setLocal('token') ?? '',
   }
 })
 
