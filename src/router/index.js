@@ -17,35 +17,20 @@ const routes = [
     name: 'home',
     component: () => import('../views/home/home.vue'),
     children: [
-      // {
-      //   path: 'weather/city',
-      //   name: 'weatherCity',
-      //   component: () => import('../views/home/system/weather/city.vue')
-      // },
       {
         path: 'user/info',
         name: 'userinfo',
         component: () => import('../views/system/user/userinfo/index.vue')
       },
       {
-        path: 'shop/info',
-        name: 'shopinfo',
-        component: () => import('../views/system/shop/goods/index.vue')
-      },
-      {
-        path: 'shop/kit',
-        name: 'shopkit',
-        component: () => import('../views/system/shop/garagekit/index.vue')
-      },
-      {
-        path: 'shop/album',
-        name: 'shopalbum',
-        component: () => import('../views/system/shop/album/index.vue')
-      },
-      {
         path: 'auth/info',
         name: 'authInfo',
         component: () => import('../views/userInfo/index.vue')
+      },
+      {
+        path: 'dict/info',
+        name: 'dictInfo',
+        component: () => import('../views/system/dict/index.vue')
       }
     ]
   }

@@ -43,7 +43,7 @@ const emits = defineEmits(['CurrentValue'])
 
 defineProps({
   title: { type: String, require: true },
-  tableData: { type: Object as PropType<Ishopkeeper>, require: true },
+  tableData: { type: Object, require: true },
   tableProp: { type: Array, require: true }
 })
 

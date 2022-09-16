@@ -77,6 +77,14 @@ watch(
   }
 )
 
+watch(
+  () => props.isShowDiglog,
+  (newValue) => {
+    console.log(newValue)
+    emits('update:modelValue', newValue)
+  }
+)
+
 const emits = defineEmits([
   'sumbitValue',
   'update:modelValue',
