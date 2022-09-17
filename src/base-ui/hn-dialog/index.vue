@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :model-value="isShowDiglog" title="增加编辑" center>
+    <el-dialog v-model="isShowDiglog" title="增加编辑" center>
       <!-- form -->
       <el-form :model="newFormData">
         <template v-for="item in dialogOptions" :key="item.label">
@@ -74,14 +74,6 @@ watch(
   },
   {
     deep: true
-  }
-)
-
-watch(
-  () => props.isShowDiglog,
-  (newValue) => {
-    console.log(newValue)
-    emits('update:modelValue', newValue)
   }
 )
 

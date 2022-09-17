@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { apiGetData } from '../request/dict/index'
+import { apiDelData, apiGetData, apiUpdateData } from '../request/dict/index'
 
 export const useStore = defineStore('dictStore', {
   state: () => ({
@@ -7,9 +7,17 @@ export const useStore = defineStore('dictStore', {
   }),
   getters: {},
   actions: {
-    async getData() {
-      const { data: res } = await apiGetData()
+    async getData(offset) {
+      const { data: res } = await apiGetData(offset)
       this.dictData = res
+    },
+    async delData(e) {
+      await apiDelData(e)
+      await this.getData()
+    },
+    async updateData(e) {
+      await apiUpdateData(e)
+      await this.getData()
     }
   }
 })

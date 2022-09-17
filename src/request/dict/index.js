@@ -1,16 +1,16 @@
 import httpRequest from '@/request/index'
 
-export function apiGetData() {
+export function apiGetData(offset) {
   return httpRequest({
-    url: '/dict',
+    url: `/dict?offset=${offset}`,
     method: 'get'
   })
 }
 
 export function apiDelData(id) {
   return httpRequest({
-    url: `/dict${id}`,
-    method: 'post'
+    url: `/dict/${id}`,
+    method: 'delete'
   })
 }
 
@@ -24,7 +24,7 @@ export function apiAddData(data) {
 
 export function apiUpdateData(data) {
   return httpRequest({
-    url: `/dict${id}`,
+    url: `/dict/${id}`,
     method: 'post',
     data
   })

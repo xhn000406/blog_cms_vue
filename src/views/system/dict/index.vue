@@ -5,45 +5,56 @@
       :table-options="tableOptions"
       :table-data="tableData"
       @del-item="delItem"
+      @edit-item="editItem"
       @search-item="searchItem"
       @handle-item="handleItem"
       @sumbit-item="sumbitItem"
+      @page-item="pageItem"
     >
     </Table>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { tableOptions } from './config/index'
 import { useStore } from '../../../store/dictStore'
 
 import Table from '../../../base-ui/table/index.vue'
 
 const title = ref('字典管理')
-let tableData = ref([])
 
 const store = useStore()
-
-const delItem = () => {
-  console.log('del')
+const offset = ref(0)
+const delItem = async (e) => {
+  await store.delData(e)
 }
 
-const searchItem = () => {
+let tableData = computed(() => store.dictData)
+
+const searchItem = (e) => {
   console.log('search')
 }
 
-const handleItem = () => {
-  console.log('handle')
+const editItem = (e) => {
+  //   store.updateData(e)
+  console.log(123)
 }
 
-const sumbitItem = () => {
+const handleItem = (e) => {
+  console.log(e)
+}
+
+const sumbitItem = (e) => {
   console.log('subitItem')
 }
 
+const pageItem = async (e) => {
+  await store.getData(e)
+}
+
 onMounted(async () => {
-  await store.getData()
-  tableData.value = store.dictData
+  await store.getData(offset.value)
 })
 </script>
 

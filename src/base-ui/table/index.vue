@@ -47,6 +47,13 @@
         >
       </template>
     </hn-table>
+    <div class="demo-pagination-block">
+      <el-pagination
+        layout="total, prev, pager, next"
+        :total="100"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -56,8 +63,17 @@ import HnDialog from '../hn-dialog/index.vue'
 
 // import { tableOptions, dialogOptions } from './config/city'
 
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, reactive } from 'vue'
 
+//事件发送
+const emits = defineEmits([
+  'editItem',
+  'handleItem',
+  'searchItem',
+  'sumbitItem',
+  'delItem',
+  'pageItem'
+])
 const prop = defineProps({
   title: {
     type: String,
@@ -72,44 +88,47 @@ const prop = defineProps({
     default: []
   }
 })
-
-const emits = defineEmits([
-  'editItem',
-  'handleItem',
-  'searchItem',
-  'sumbitItem',
-  'delItem'
-])
-
 const formData = ref({})
-const Name = ref('')
 const isShowDiglog = ref(false)
 
+// 搜索
+const Name = ref('')
 const searchHandle = async () => {
   emits('searchItem', Name.value)
 }
 
+//添加
 const addHandle = () => {
   formData.value = {}
   isShowDiglog.value = true
 }
 
+// 提交
 const sumbitValue = async (e) => {
   emits('sumbitItem', formData.value)
 }
 
+//修改
 const currentHandle = (e) => {
   formData.value = e
-  console.log(e)
+  console.log(formData.value)
   emits('handleItem', e)
 }
 
+//编辑
 const editItem = (e) => {
   isShowDiglog.value = true
+
   emits('editItem', e)
 }
+//删除
 const deleItem = async (e) => {
   emits('delItem', e)
+}
+
+//分页
+const handleCurrentChange = (e) => {
+  emits('pageItem', (e - 1) * 10)
 }
 </script>
 
@@ -118,6 +137,12 @@ const deleItem = async (e) => {
   background-color: white;
   width: 100%;
   height: 100%;
+}
+.demo-pagination-block {
+  display: flex;
+  justify-content: end;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 .banner {
   display: flex;
