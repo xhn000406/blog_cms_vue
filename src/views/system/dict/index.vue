@@ -5,12 +5,13 @@
       :table-options="tableOptions"
       :table-data="tableData"
       @del-item="delItem"
-      @edit-item="editItem"
       @search-item="searchItem"
-      @handle-item="handleItem"
       @sumbit-item="sumbitItem"
       @page-item="pageItem"
     >
+      <template #dictName="scope">
+        <div class="dict_color">{{ scope.row.dict_name }}</div>
+      </template>
     </Table>
   </div>
 </template>
@@ -36,17 +37,12 @@ const searchItem = (e) => {
   console.log('search')
 }
 
-const editItem = (e) => {
-  //   store.updateData(e)
-  console.log(123)
-}
-
-const handleItem = (e) => {
-  console.log(e)
-}
-
-const sumbitItem = (e) => {
-  console.log('subitItem')
+const sumbitItem = async (e) => {
+  if (e.id) {
+    await store.updateData(e)
+  } else {
+    await store.addData(e)
+  }
 }
 
 const pageItem = async (e) => {
@@ -58,4 +54,27 @@ onMounted(async () => {
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.dict_color {
+  cursor: pointer;
+  position: relative;
+}
+.dict_color::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  margin-top: 8.5px;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
+  margin-left: 14px;
+  position: absolute;
+  transition: all 0.3s;
+  transform: rotate(-40deg);
+}
+
+.dict_color:hover::after {
+  width: 10px;
+  height: 10px;
+  color: red;
+}
+</style>

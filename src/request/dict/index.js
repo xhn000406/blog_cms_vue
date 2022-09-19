@@ -22,7 +22,7 @@ export function apiAddData(data) {
   })
 }
 
-export function apiUpdateData(data) {
+export function apiUpdateData(id, data) {
   return httpRequest({
     url: `/dict/${id}`,
     method: 'post',

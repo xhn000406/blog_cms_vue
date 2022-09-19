@@ -1,7 +1,10 @@
 <template>
   <div class="pegShop">
     <div class="banner">
-      <div>
+      <div class="banner_back">
+        <div class="banner_main" v-if="isShowBack">
+          <el-page-header title=" "></el-page-header>
+        </div>
         <h2>{{ title }}</h2>
       </div>
       <div class="topHandle">
@@ -9,13 +12,14 @@
           <el-input v-model="Name"></el-input
           ><el-button type="primary" @click="searchHandle">查询</el-button>
         </div>
-        <el-button type="primary" @click="addHandle"
+        <el-button type="primary" @click.prevent="addHandle"
           >增加商品
 
           <hn-dialog
             v-model:formData="formData"
             :isShowDiglog="isShowDiglog"
             v-model:modelValue="isShowDiglog"
+            :defaultInfo="defaultInfo"
             @sumbitValue="sumbitValue"
             :dialogOptions="tableOptions"
           ></hn-dialog>
@@ -27,6 +31,16 @@
       :tableProp="tableOptions"
       @currentValue="currentHandle"
     >
+      <template
+        v-for="item in otherPropSlots"
+        :key="item.prop"
+        #[item.slotname]="scope"
+      >
+        <template v-if="item.slotname">
+          <slot :name="item.slotname" :row="scope.row"></slot>
+        </template>
+      </template>
+
       <template #img="scope">
         <div class="demo-image__preview">
           <el-image
@@ -86,10 +100,26 @@ const prop = defineProps({
   tableOptions: {
     type: Array,
     default: []
+  },
+  isShowBack: {
+    type: Boolean,
+    default: false
   }
 })
+const defaultInfo = ref()
 const formData = ref({})
+let flag = ref(0)
 const isShowDiglog = ref(false)
+
+const otherPropSlots = prop.tableOptions.map((item) => {
+  switch (item.slotname) {
+    case 'img':
+      throw new Error('slot:img已经存在!!!')
+    default:
+      break
+  }
+  return item
+})
 
 // 搜索
 const Name = ref('')
@@ -99,25 +129,35 @@ const searchHandle = async () => {
 
 //添加
 const addHandle = () => {
-  formData.value = {}
   isShowDiglog.value = true
+  if (flag.value == 0) {
+    formData.value = {}
+    flag.value = 1
+  }
 }
 
 // 提交
 const sumbitValue = async (e) => {
-  emits('sumbitItem', formData.value)
+  flag.value = 0
+  console.log(e)
+  emits('sumbitItem', e)
 }
 
 //修改
 const currentHandle = (e) => {
   formData.value = e
-  console.log(formData.value)
+  console.log(e)
   emits('handleItem', e)
 }
 
 //编辑
 const editItem = (e) => {
   isShowDiglog.value = true
+  if (flag.value == 0) {
+    formData.value = {}
+    flag.value = 1
+  }
+  defaultInfo.value = formData.value
 
   emits('editItem', e)
 }
@@ -137,6 +177,12 @@ const handleCurrentChange = (e) => {
   background-color: white;
   width: 100%;
   height: 100%;
+}
+.banner_back {
+  display: flex;
+}
+.banner_main {
+  display: flex;
 }
 .demo-pagination-block {
   display: flex;

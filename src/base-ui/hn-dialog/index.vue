@@ -67,13 +67,19 @@ watch(
   () => props.formData,
   (newVal) => {
     props.dialogOptions.forEach((item) => {
-      console.log(newVal)
       newFormData.value[`${item.prop}`] = newVal[`${item.prop}`]
       emits('update:formData', newFormData.value)
     })
   },
   {
     deep: true
+  }
+)
+
+watch(
+  () => props.isShowDiglog,
+  (n) => {
+    emits('update:modelValue', n)
   }
 )
 
@@ -87,15 +93,20 @@ const emits = defineEmits([
 const formLabelWidth = '140px'
 
 const escHandle = () => {
+  newFormData.value = {}
   emits('update:modelValue', false)
 }
 
 const sumbitHandle = () => {
-  let formData = {}
-  props.dialogOptions.forEach((item) => {
-    formData[item.prop] = item.value
-  })
-  emits('sumbitValue', formData)
+  // console.log()
+  // let formData = {}
+  // props.dialogOptions.forEach((item) => {
+  //   console.log(item.prop)
+  //   console.log(item.value)
+  //   formData[item.prop] = item.value
+  // })
+  // console.log(formData)
+  emits('sumbitValue', newFormData.value)
   emits('update:modelValue', false)
 }
 </script>

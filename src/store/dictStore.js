@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
-import { apiDelData, apiGetData, apiUpdateData } from '../request/dict/index'
+import {
+  apiAddData,
+  apiDelData,
+  apiGetData,
+  apiUpdateData
+} from '../request/dict/index'
 
 export const useStore = defineStore('dictStore', {
   state: () => ({
@@ -13,10 +18,17 @@ export const useStore = defineStore('dictStore', {
     },
     async delData(e) {
       await apiDelData(e)
-      await this.getData()
+      await this.getData(0)
+
+      console.log(this.dictData)
     },
     async updateData(e) {
-      await apiUpdateData(e)
+      console.log(e.id)
+      await apiUpdateData(e.id, e)
+      await this.getData(0)
+    },
+    async addData(e) {
+      await apiAddData(e)
       await this.getData()
     }
   }
