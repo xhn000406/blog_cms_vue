@@ -10,7 +10,9 @@
       @page-item="pageItem"
     >
       <template #dictName="scope">
-        <div class="dict_color">{{ scope.row.dict_name }}</div>
+        <div class="dict_color" @click="pushArticle">
+          {{ scope.row.dict_name }}
+        </div>
       </template>
     </Table>
   </div>
@@ -22,9 +24,11 @@ import { tableOptions } from './config/index'
 import { useStore } from '../../../store/dictStore'
 
 import Table from '../../../base-ui/table/index.vue'
+import { useRouter } from 'vue-router'
 
 const title = ref('字典管理')
 
+const router = useRouter()
 const store = useStore()
 const offset = ref(0)
 const delItem = async (e) => {
@@ -43,6 +47,10 @@ const sumbitItem = async (e) => {
   } else {
     await store.addData(e)
   }
+}
+
+const pushArticle = () => {
+  router.push('/home/editor')
 }
 
 const pageItem = async (e) => {

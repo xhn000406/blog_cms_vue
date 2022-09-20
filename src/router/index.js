@@ -31,6 +31,11 @@ const routes = [
         path: 'dict/info',
         name: 'dictInfo',
         component: () => import('../views/system/dict/index.vue')
+      },
+      {
+        path: 'editor',
+        name: 'editor',
+        component: () => import('../views/edit/index.vue')
       }
     ]
   }
