@@ -9,9 +9,17 @@ export function apiaddData(data) {
   })
 }
 
-export function apiGetData(id) {
+export function apiGetEditData(id) {
   return httpRequest({
     url: `/edit/${id}`,
     method: 'get'
+  })
+}
+
+export function apiUpdateData(id, data) {
+  return httpRequest({
+    url: `/edit/${id}`,
+    method: 'post',
+    data
   })
 }

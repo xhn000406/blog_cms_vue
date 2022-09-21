@@ -10,7 +10,7 @@
       @page-item="pageItem"
     >
       <template #dictName="scope">
-        <div class="dict_color" @click="pushArticle">
+        <div class="dict_color" @click="pushArticle(scope.row)">
           {{ scope.row.dict_name }}
         </div>
       </template>
@@ -49,8 +49,8 @@ const sumbitItem = async (e) => {
   }
 }
 
-const pushArticle = () => {
-  router.push('/home/editor')
+const pushArticle = (e) => {
+  router.push(`/home/dict/artcile?title=${e.dict_name}&id=${e.id}`)
 }
 
 const pageItem = async (e) => {

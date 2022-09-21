@@ -8,16 +8,24 @@
       router
     >
       <template v-for="item in MenuData" :key="item.id">
-        <el-sub-menu :index="item.id + ''">
-          <template #title>
+        <template v-if="item.isSingle">
+          <el-menu-item :index="'/' + item.url">
             <span>{{ item.title }}</span>
-          </template>
-          <template v-for="Menu in item.children" :key="Menu.id">
-            <el-menu-item :index="'/' + Menu.url">
-              <span>{{ Menu.title }}</span>
-            </el-menu-item>
-          </template>
-        </el-sub-menu>
+          </el-menu-item>
+        </template>
+
+        <template v-else>
+          <el-sub-menu :index="item.id + ''">
+            <template #title>
+              <span>{{ item.title }}</span>
+            </template>
+            <template v-for="Menu in item.children" :key="Menu.id">
+              <el-menu-item :index="'/' + Menu.url">
+                <span>{{ Menu.title }}</span>
+              </el-menu-item>
+            </template>
+          </el-sub-menu></template
+        >
       </template>
     </el-menu>
   </div>

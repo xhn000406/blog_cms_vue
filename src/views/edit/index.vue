@@ -4,7 +4,7 @@
       <div @click="itemIsshow" style="padding-right: 10px">
         <el-button>编辑</el-button>
       </div>
-      <div @click="btnSend"><el-button type="primary">发送</el-button></div>
+      <!-- <div @click="btnSend"><el-button type="primary">发送</el-button></div> -->
     </div>
     <div style="border: 1px solid #ccc">
       <Toolbar
@@ -40,11 +40,13 @@ import { onBeforeUnmount, ref, shallowRef, onMounted, computed } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import EditorComponents from './editorComponents.vue'
 import { useStore } from '../../store/editStore'
+import { useRoute } from 'vue-router'
+import { apiaddData, apiGetEditData } from '../../request/edit'
 
 const store = useStore()
-
+const route = useRoute()
 const editorRef = shallowRef()
-const isShow = ref(true)
+const isShow = ref(false)
 const mode = ref('default')
 const formData = ref({})
 // 内容 HTML
@@ -53,19 +55,21 @@ const valueHtml = ref('')
 // 内容
 
 // 模拟 ajax 异步获取内容
-onMounted(() => {
-  setTimeout(() => {
-    valueHtml.value = store.edit.valueHtml
-  }, 1500)
+onMounted(async () => {
+  const id = route.query.id
+  if (id) {
+    const { data: res } = await apiGetEditData(id)
+    valueHtml.value = res[0].valueHtml
+    console.log(valueHtml.value)
+  }
 })
 
 const btnSend = async (e) => {
-  console.log(formData.value.title)
-
   if (formData.value.title == undefined) {
-    alert('asdsa')
+    console.log(formData.value)
+    alert('请输入标题')
   } else {
-    await store.addData(formData.value)
+    await apiaddData(formData.value)
   }
 }
 

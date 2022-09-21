@@ -10,7 +10,7 @@ import router from './router/index'
 const pinpia = createPinia()
 
 const app = createApp(App)
-app.use(router)
 app.use(pinpia)
+app.use(router)
 app.use(ElementPlus)
 app.mount('#app')

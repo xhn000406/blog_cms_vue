@@ -20,5 +20,11 @@ export const MenuData = [
         url: 'home/dict/info'
       }
     ]
+  },
+  {
+    id: 2,
+    title: '文章编译',
+    url: 'home/editor',
+    isSingle: true
   }
 ]

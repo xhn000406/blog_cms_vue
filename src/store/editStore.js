@@ -1,22 +1,23 @@
 import { defineStore } from 'pinia'
-import { apiaddData, apiGetData } from '../request/edit'
-
+import { apiaddData, apiGetEditData } from '../request/edit'
+import { apiGetData } from '../request/dict'
 import { localUtil } from '../utils/localUtil'
 
 export const useStore = defineStore('editStore', {
   state: () => ({
-    edit: { title: '', valueHtml: '', imgUrl: '' }
+    edit: { title: '', valueHtml: '', imgUrl: '', articleType: '' },
+    dict: []
   }),
   getters: {},
   actions: {
-    async addData(data) {
-      await apiaddData(data)
+    async getDictData() {
+      const { data: res } = await apiGetData()
+      this.dict = res
     },
-    async getData(id) {
-      const { data: res } = await apiGetData(id)
-      this.edit = res[0]
 
-      console.log(this.edit)
+    async getData(id) {
+      const { data: res } = await apiGetEditData(id)
+      this.edit = res[0]
     }
   }
 })

@@ -3,11 +3,18 @@
     <div class="banner">
       <div class="banner_back">
         <div class="banner_main" v-if="isShowBack">
-          <el-page-header title=" "></el-page-header>
+          <el-page-header
+            title=" "
+            @click="
+              () => {
+                router.back()
+              }
+            "
+          ></el-page-header>
         </div>
         <h2>{{ title }}</h2>
       </div>
-      <div class="topHandle">
+      <div class="topHandle" v-if="isShowTopHandle">
         <div class="searchHandle">
           <el-input v-model="Name"></el-input
           ><el-button type="primary" @click="searchHandle">查询</el-button>
@@ -31,6 +38,28 @@
       :tableProp="tableOptions"
       @currentValue="currentHandle"
     >
+      <template #img="scope">
+        <div class="demo-image__preview">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="scope.row.imgUrl"
+            :initial-index="0"
+            fit="cover"
+            :preview-src-list="[scope.row.imgUrl]"
+            :z-index="999"
+          />
+        </div>
+      </template>
+
+      <template #buttonHandle="scope" v-if="isShowButtonHandle">
+        <el-button type="primary" @click="editItem(scope.row.id)"
+          >修改</el-button
+        >
+        <el-button type="primary" @click="deleItem(scope.row.id)"
+          >删除</el-button
+        >
+      </template>
+
       <template
         v-for="item in otherPropSlots"
         :key="item.prop"
@@ -39,26 +68,6 @@
         <template v-if="item.slotname">
           <slot :name="item.slotname" :row="scope.row"></slot>
         </template>
-      </template>
-
-      <template #img="scope">
-        <div class="demo-image__preview">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="'/api' + scope.row.img"
-            :initial-index="0"
-            fit="cover"
-          />
-        </div>
-      </template>
-
-      <template #buttonHandle="scope">
-        <el-button type="primary" @click="editItem(scope.row.id)"
-          >修改</el-button
-        >
-        <el-button type="primary" @click="deleItem(scope.row.id)"
-          >删除</el-button
-        >
       </template>
     </hn-table>
     <div class="demo-pagination-block">
@@ -78,6 +87,7 @@ import HnDialog from '../hn-dialog/index.vue'
 // import { tableOptions, dialogOptions } from './config/city'
 
 import { ref, onMounted, watch, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
 //事件发送
 const emits = defineEmits([
@@ -104,8 +114,19 @@ const prop = defineProps({
   isShowBack: {
     type: Boolean,
     default: false
+  },
+  isShowTopHandle: {
+    type: Boolean,
+    default: true
+  },
+  isShowButtonHandle: {
+    type: Array,
+    default: ['edit', 'del']
   }
 })
+
+const router = useRouter()
+
 const defaultInfo = ref()
 const formData = ref({})
 let flag = ref(0)
@@ -114,12 +135,16 @@ const isShowDiglog = ref(false)
 const otherPropSlots = prop.tableOptions.map((item) => {
   switch (item.slotname) {
     case 'img':
-      throw new Error('slot:img已经存在!!!')
+      return false
+    case 'buttonHandle':
+      return false
     default:
       break
   }
   return item
 })
+
+console.log(otherPropSlots)
 
 // 搜索
 const Name = ref('')

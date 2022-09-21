@@ -6,14 +6,21 @@
         <div class="main_content">
           <div>
             <el-form>
-              <!-- <template v-for="item in dialogOptions" :key="item.label"> -->
               <el-form-item label="标题" label-width="60px">
-                <!-- <el-input v-model="newFormData[`${item.prop}`]" /> -->
                 <el-input
                   placeholder="请输入文章标题"
                   v-model="formData.title"
                 ></el-input>
-                <!-- select -->
+              </el-form-item>
+              <el-form-item label="类型" label-width="60px">
+                <el-select v-model="formData.articleType" placeholder="Select">
+                  <el-option
+                    v-for="item in editData"
+                    :key="item.id"
+                    :label="item.dict_name"
+                    :value="item.id"
+                  />
+                </el-select>
               </el-form-item>
               <el-form-item label="封面" label-width="60px">
                 <el-upload
@@ -38,7 +45,7 @@
           </div>
         </div>
         <div class="main_bottom">
-          <el-button type="primary" @click="saveItem">保存</el-button>
+          <el-button type="primary" @click="saveItem">保存文章</el-button>
           <el-button @click="itemCencel">取消</el-button>
         </div>
       </div>
@@ -50,6 +57,9 @@
 import { Plus } from '@element-plus/icons-vue'
 
 import { watch, ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { apiGetData } from '../../request/dict'
+import { apiaddData, apiGetEditData, apiUpdateData } from '../../request/edit'
 import { uploadAvatar } from '../../request/upload'
 import { useStore } from '../../store/editStore'
 
@@ -67,10 +77,16 @@ const props = defineProps({
 })
 
 const store = useStore()
-
+const route = useRoute()
 let elUploadRef = ref()
 let avatar = ref('')
-const formData = computed(() => store.edit)
+const formData = ref({
+  title: '',
+  valueHtml: '',
+  imgUrl: '',
+  articleType: ''
+})
+const editData = ref([])
 const falseShow = ref()
 
 const itemCencel = () => {
@@ -91,9 +107,13 @@ const beforeUpload = (file) => {
 
 const saveItem = async () => {
   await elUploadRef.value.submit()
-  console.log(formData.value)
   emits('sendData', formData.value)
   emits('update:isshow', false)
+  if (route.query.id) {
+    await apiUpdateData(route.query.id, formData.value)
+  } else {
+    await apiaddData(formData.value)
+  }
 }
 
 watch(
@@ -116,7 +136,13 @@ watch(
 
 // 获取数据
 onMounted(async () => {
-  await store.getData(1)
+  const result = await apiGetData()
+  editData.value = result.data
+  if (route.query.id != undefined) {
+    const id = route.query.id
+    const res = await apiGetEditData(id)
+    formData.value = res.data[0]
+  }
 })
 </script>
 

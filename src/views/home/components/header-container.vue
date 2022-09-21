@@ -29,13 +29,15 @@ watch(
   () => router.currentRoute.value,
   (toPath) => {
     MenuData.find((item) => {
-      item.children.find((aitem) => {
-        if (`/${aitem.url}` === toPath.path) {
-          breadCrumb.value[0].name = item.title
-          breadCrumb.value[1].name = aitem.title
-          breadCrumb.value[1].url = toPath.path
-        }
-      })
+      if (item.children) {
+        item.children.find((aitem) => {
+          if (`/${aitem.url}` === toPath.path) {
+            breadCrumb.value[0].name = item.title
+            breadCrumb.value[1].name = aitem.title
+            breadCrumb.value[1].url = toPath.path
+          }
+        })
+      }
       store.saveBreadCrumb(breadCrumb.value)
     })
   }
