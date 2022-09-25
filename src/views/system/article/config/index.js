@@ -10,6 +10,12 @@ export const tableOptions = [
     slotname: 'img'
   },
   {
+    prop: 'isSwaper',
+    label: '是否轮播',
+    type: 'text',
+    slotname: 'isSwaper'
+  },
+  {
     prop: 'title',
     label: '文章标题',
     type: 'text'

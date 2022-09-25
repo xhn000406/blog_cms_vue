@@ -22,6 +22,12 @@
                   />
                 </el-select>
               </el-form-item>
+              <el-form-item label="轮播" label-width="60px">
+                <el-radio-group v-model="formData.isSwaper" class="ml-4">
+                  <el-radio label="1" size="small">是</el-radio>
+                  <el-radio label="0" size="small">否</el-radio>
+                </el-radio-group>
+              </el-form-item>
               <el-form-item label="封面" label-width="60px">
                 <el-upload
                   action="#"
@@ -40,6 +46,7 @@
                   <el-icon><Plus /></el-icon>
                 </el-upload>
               </el-form-item>
+
               <!-- </template> -->
             </el-form>
           </div>
@@ -80,11 +87,13 @@ const store = useStore()
 const route = useRoute()
 let elUploadRef = ref()
 let avatar = ref('')
+const isSwaper = ref()
 const formData = ref({
   title: '',
   valueHtml: '',
   imgUrl: '',
-  articleType: ''
+  articleType: '',
+  isSwaper: '0'
 })
 const editData = ref([])
 const falseShow = ref()

@@ -6,3 +6,17 @@ export function apiGetArticleData(id, offset) {
     method: 'get'
   })
 }
+
+export function apiDeleteArticleData(id) {
+  return httpRequest({
+    url: `/article/${id}`,
+    method: 'delete'
+  })
+}
+
+export function apiSendArticleData(id) {
+  return httpRequest({
+    url: `/article/${id}`,
+    method: 'post'
+  })
+}
