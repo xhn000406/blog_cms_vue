@@ -14,7 +14,7 @@ export const useStore = defineStore('dictStore', {
   actions: {
     async getData(offset) {
       const { data: res } = await apiGetData(offset)
-      this.dictData = res
+      this.dictData = res.result
     },
     async delData(e) {
       await apiDelData(e)

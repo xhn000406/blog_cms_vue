@@ -11,16 +11,15 @@ const routes = [
     name: 'login',
     component: () => import('../views/login/index.vue')
   },
-
   {
     path: '/home',
     name: 'home',
     component: () => import('../views/home/home.vue'),
     children: [
       {
-        path: 'user/info',
-        name: 'userinfo',
-        component: () => import('../views/system/user/userinfo/index.vue')
+        path: '/homepage',
+        name: 'homePage',
+        component: () => import('../views/system/homepage/index.vue')
       },
       {
         path: 'auth/info',
@@ -41,6 +40,11 @@ const routes = [
         path: 'dict/artcile',
         name: 'dictArtcile',
         component: () => import('../views/system/article/index.vue')
+      },
+      {
+        path: 'record',
+        name: 'Record',
+        component: () => import('../views/system/record/index.vue')
       }
     ]
   }

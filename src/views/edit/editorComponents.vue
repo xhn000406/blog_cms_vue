@@ -146,7 +146,8 @@ watch(
 // 获取数据
 onMounted(async () => {
   const result = await apiGetData()
-  editData.value = result.data
+  editData.value = result.data.result
+
   if (route.query.id != undefined) {
     const id = route.query.id
     const res = await apiGetEditData(id)

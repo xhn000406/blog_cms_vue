@@ -18,7 +18,6 @@
       @selection-change="handleSelectionChange"
       @current-change="handleCurrentChange"
     >
-      <el-table-column type="selection" width="60" />
       <template v-for="item in (tableProp as any)">
         <el-table-column align="center" :="item" :width="item.width">
           <template #default="scope">
