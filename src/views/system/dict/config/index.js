@@ -1,10 +1,5 @@
 export const tableOptions = [
   {
-    prop: 'id',
-    label: 'id'
-  },
-
-  {
     prop: 'dict_name',
     label: '字典文字',
     type: 'text',

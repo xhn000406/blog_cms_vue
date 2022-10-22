@@ -10,9 +10,9 @@ export const useStore = defineStore('loginStore', {
   }),
   getters: {},
   actions: {
-    async getLoginData(payload) {},
     saveBreadCrumb(data) {
       this.$state.breadCrumb = data
+      console.log(data)
       localUtil.saveLocal('bereadCrumb', data)
     }
   }

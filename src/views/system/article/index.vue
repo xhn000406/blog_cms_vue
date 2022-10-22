@@ -1,39 +1,20 @@
 <template>
-  <div id="article">
+  <div id="dict">
     <Table
-      :is-show-back="true"
       :title="title"
       :table-options="tableOptions"
       :table-data="tableData"
-      :is-show-top-handle="false"
+      @del-item="delItem"
+      @search-item="searchItem"
+      @sumbit-item="sumbitItem"
+      @page-item="pageItem"
+      :is-show-top-handle="['', '']"
+      :isShowButtonHandle="false"
+      :is-show-date="false"
     >
-      <template #Vhtml="scope">
-        <div v-html="scope.row.valueHtml"></div>
-      </template>
-
-      <template #send="scope">
-        <div v-if="scope.row.send == 1">已投稿</div>
-        <div v-if="scope.row.send == 0">未投稿</div>
-      </template>
-
-      <template #isSwaper="scope">
-        <div v-if="scope.row.isSwaper == 1">已轮播</div>
-        <div v-if="scope.row.isSwaper == 0">未轮播</div>
-      </template>
-
-      <template> </template>
-
-      <template #articleHandle="scope">
-        <div>
-          <el-button type="primary" @click="pushEditor(scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="primary" @click="deleteItem(scope.row)"
-            >删除</el-button
-          >
-          <el-button type="primary" @click="sendItem(scope.row)"
-            >发布</el-button
-          >
+      <template #dictName="scope">
+        <div class="dict_color" @click="pushArticle(scope.row)">
+          {{ scope.row.dict_name }}
         </div>
       </template>
     </Table>
@@ -41,48 +22,68 @@
 </template>
 
 <script setup>
-import { tableOptions } from './config'
-import Table from '../../../base-ui/table/index.vue'
 import { ref, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from '../../../store/articleStore'
-import {
-  apiDeleteArticleData,
-  apiSendArticleData
-} from '../../../request/article'
+import { tableOptions } from './config/index'
+import { useStore } from '../../../store/dictStore'
 
-const title = ref('')
-const route = useRoute()
+import Table from '../../../base-ui/table/index.vue'
+import { useRouter } from 'vue-router'
+
+const title = ref('文章管理')
+
 const router = useRouter()
 const store = useStore()
-const tableData = computed(() => store.article)
-let id
-
-const pushEditor = (e) => {
-  console.log(e.id)
-  router.push(`/home/editor?id=${e.id}`)
+const offset = ref(0)
+const delItem = async (e) => {
+  await store.delData(e)
 }
 
-const deleteItem = async (e) => {
-  await apiDeleteArticleData(e.id)
-  await store.getData(id)
+let tableData = computed(() => store.dictData)
+
+const searchItem = (e) => {}
+
+const sumbitItem = async (e) => {
+  if (e.id) {
+    await store.updateData(e)
+  } else {
+    await store.addData(e)
+  }
 }
 
-const sendItem = async (e) => {
-  console.log(123)
-  await apiSendArticleData(e.id)
-  await store.getData(id)
+const pushArticle = (e) => {
+  router.push(`/home/articlelist?title=${e.dict_name}&id=${e.id}`)
+}
+
+const pageItem = async (e) => {
+  await store.getData(e)
 }
 
 onMounted(async () => {
-  title.value = route.query.title
-  id = route.query.id
-  await store.getData(id)
+  await store.getData(offset.value)
 })
 </script>
 
 <style lang="less" scoped>
-.el-button {
-  width: 44px;
+.dict_color {
+  cursor: pointer;
+  position: relative;
+}
+.dict_color::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  margin-top: 8.5px;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
+  margin-left: 14px;
+  position: absolute;
+  transition: all 0.3s;
+  transform: rotate(-40deg);
+}
+
+.dict_color:hover::after {
+  width: 10px;
+  height: 10px;
+  color: red;
 }
 </style>

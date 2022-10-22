@@ -2,9 +2,12 @@
   <div id="record">
     <Table
       title="评论文字"
-      :table-data="tableData"
+      :table-data="tableData.result"
       :tableOptions="tableOptions"
       :is-show-top-handle="false"
+      @pageItem="pageItem"
+      :total="tableData.count"
+      :isShowButtonHandle="false"
     ></Table>
   </div>
 </template>
@@ -18,10 +21,19 @@ import { apiGetRecordData } from '../../../request/record/index.js'
 const tableData = ref([])
 
 onMounted(async () => {
-  const { data: res } = await apiGetRecordData()
-  tableData.value = res.result
-  console.log(tableData.value)
+  await initData()
 })
+
+const initData = async (page) => {
+  const { data: res } = await apiGetRecordData(page)
+
+  tableData.value = res
+}
+
+const pageItem = (e) => {
+  console.log(typeof e)
+  initData(e)
+}
 </script>
 
 <style lang="less" scoped>
@@ -29,6 +41,5 @@ onMounted(async () => {
   background-color: white;
   border-radius: 10px;
   width: 100%;
-  height: 100%;
 }
 </style>

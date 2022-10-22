@@ -1,6 +1,7 @@
 <template>
   <div class="pegShop">
     <div class="bottom_handle">
+      <div>编译文章</div>
       <div @click="itemIsshow" style="padding-right: 10px">
         <el-button>编辑</el-button>
       </div>
@@ -102,7 +103,8 @@ const handleCreated = (editor) => {
 .bottom_handle {
   margin-top: 30px;
   display: flex;
-  justify-content: end;
-  margin: 10px;
+  font-size: 24px;
+  justify-content: space-between;
+  margin: 20px;
 }
 </style>

@@ -1,8 +1,8 @@
 import httpRequest from '@/request/index'
 
-export function apiGetArticleData(id, offset) {
+export function apiGetArticleData(id, page) {
   return httpRequest({
-    url: `/article?id=${id}&offset=${offset}`,
+    url: `/article?id=${id}&page=${page}`,
     method: 'get'
   })
 }

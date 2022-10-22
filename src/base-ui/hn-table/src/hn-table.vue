@@ -10,7 +10,7 @@
       </div>
     </div>
     <el-table
-      :v-loading="true"
+      v-loading="loading"
       :data="tableData"
       stripe
       style="width: 100%"
@@ -36,14 +36,22 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, defineEmits } from 'vue'
+import { PropType, defineEmits, onMounted, ref } from 'vue'
 
 const emits = defineEmits(['CurrentValue'])
 
-defineProps({
+const props = defineProps({
   title: { type: String, require: true },
   tableData: { type: Object, require: true },
   tableProp: { type: Array, require: true }
+})
+
+const loading = ref(true)
+
+onMounted(() => {
+  if (props.tableProp) {
+    loading.value = !loading.value
+  }
 })
 
 const getSelectionrows = (e) => {

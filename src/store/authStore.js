@@ -22,9 +22,13 @@ export const useStore = defineStore('authStore', {
     },
     async upDateInfo(fileData, formData) {
       const id = localUtil.setLocal('id')
-      const result = await uploadAvatar(fileData)
-      const { fileName } = result.data
-      formData.fileName = fileName
+      if (fileData != null) {
+        console.log(123)
+        const result = await uploadAvatar(fileData)
+        const { fileName } = result.data
+        formData.fileName = fileName
+      }
+
       await UpdateUserData(id, formData)
       await this.getInfoData()
     }

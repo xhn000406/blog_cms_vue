@@ -65,6 +65,7 @@ const store = useStore()
 const uploadHttpRequest = async () => {
   const formData = new FormData()
   formData.append('avatar', avatar.value)
+  console.log(avatar.value)
   await store.upDateInfo(formData, form)
 }
 
@@ -74,8 +75,9 @@ const beforeUpload = (file) => {
 
 const onSubmit = async () => {
   await elUploadRef.value.submit()
+  await store.upDateInfo(null, form)
 }
-console.log(imageUrl)
+
 onMounted(async () => {
   await store.getInfoData()
   form.hotMail = store.hotMail

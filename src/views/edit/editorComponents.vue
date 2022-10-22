@@ -152,6 +152,7 @@ onMounted(async () => {
     const id = route.query.id
     const res = await apiGetEditData(id)
     formData.value = res.data[0]
+    console.log(formData.value)
   }
 })
 </script>

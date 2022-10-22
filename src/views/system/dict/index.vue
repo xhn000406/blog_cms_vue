@@ -8,6 +8,8 @@
       @search-item="searchItem"
       @sumbit-item="sumbitItem"
       @page-item="pageItem"
+      :is-show-top-handle="['', 'add']"
+      :is-show-date="false"
     >
       <template #dictName="scope">
         <div class="dict_color" @click="pushArticle(scope.row)">
@@ -37,9 +39,7 @@ const delItem = async (e) => {
 
 let tableData = computed(() => store.dictData)
 
-const searchItem = (e) => {
-  console.log('search')
-}
+const searchItem = (e) => {}
 
 const sumbitItem = async (e) => {
   if (e.id) {
@@ -47,10 +47,6 @@ const sumbitItem = async (e) => {
   } else {
     await store.addData(e)
   }
-}
-
-const pushArticle = (e) => {
-  router.push(`/home/dict/artcile?title=${e.dict_name}&id=${e.id}`)
 }
 
 const pageItem = async (e) => {
@@ -62,27 +58,4 @@ onMounted(async () => {
 })
 </script>
 
-<style lang="less" scoped>
-.dict_color {
-  cursor: pointer;
-  position: relative;
-}
-.dict_color::after {
-  content: '';
-  width: 5px;
-  height: 5px;
-  margin-top: 8.5px;
-  border-bottom: 1px solid #000;
-  border-right: 1px solid #000;
-  margin-left: 14px;
-  position: absolute;
-  transition: all 0.3s;
-  transform: rotate(-40deg);
-}
-
-.dict_color:hover::after {
-  width: 10px;
-  height: 10px;
-  color: red;
-}
-</style>
+<style lang="less" scoped></style>

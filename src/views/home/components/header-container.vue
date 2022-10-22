@@ -29,16 +29,28 @@ watch(
   () => router.currentRoute.value,
   (toPath) => {
     MenuData.find((item) => {
+      let href = router.currentRoute.value.fullPath.slice(1)
+      if (href === item.url && !item.children) {
+        if (breadCrumb.value.length != 1) {
+          breadCrumb.value.pop()
+        }
+        breadCrumb.value[0].name = item.title
+      }
       if (item.children) {
         item.children.find((aitem) => {
           if (`/${aitem.url}` === toPath.path) {
+            breadCrumb.value = [{}]
             breadCrumb.value[0].name = item.title
-            breadCrumb.value[1].name = aitem.title
-            breadCrumb.value[1].url = toPath.path
+
+            breadCrumb.value.push({
+              name: aitem.title,
+              url: toPath.path
+            })
+            // breadCrumb.value[1].name = aitem.title
+            // breadCrumb.value[1].url = toPath.path
           }
         })
       }
-      store.saveBreadCrumb(breadCrumb.value)
     })
   }
 )

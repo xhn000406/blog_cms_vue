@@ -17,6 +17,17 @@ export const MenuData = [
     ]
   },
   {
+    id: 6,
+    title: '文章管理',
+    children: [
+      {
+        id: 7,
+        title: '文章列表',
+        url: 'home/articleType'
+      }
+    ]
+  },
+  {
     id: 3,
     title: '文章编译',
     url: 'home/editor',

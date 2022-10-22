@@ -1,10 +1,5 @@
 export const tableOptions = [
   {
-    prop: 'id',
-    label: 'id'
-  },
-
-  {
     prop: 'recordText',
     label: '评论文字'
   },

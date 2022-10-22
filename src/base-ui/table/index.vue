@@ -14,13 +14,16 @@
         </div>
         <h2>{{ title }}</h2>
       </div>
-      <div class="topHandle" v-if="isShowTopHandle">
-        <div class="searchHandle">
+      <div class="topHandle">
+        <div class="searchHandle" v-if="isShowTopHandle[0] == 'search'">
           <el-input v-model="Name"></el-input
           ><el-button type="primary" @click="searchHandle">查询</el-button>
         </div>
-        <el-button type="primary" @click.prevent="addHandle"
-          >增加商品
+        <el-button
+          type="primary"
+          @click.prevent="addHandle"
+          v-if="isShowTopHandle[1] == 'add'"
+          >增加
 
           <hn-dialog
             v-model:formData="formData"
@@ -52,10 +55,16 @@
       </template>
 
       <template #buttonHandle="scope" v-if="isShowButtonHandle">
-        <el-button type="primary" @click="editItem(scope.row.id)"
+        <el-button
+          type="primary"
+          v-if="isShowButtonHandle[0] == 'edit'"
+          @click="editItem(scope.row.id)"
           >修改</el-button
         >
-        <el-button type="primary" @click="deleItem(scope.row.id)"
+        <el-button
+          type="primary"
+          @click="deleItem(scope.row.id)"
+          v-if="isShowButtonHandle[1] == 'del'"
           >删除</el-button
         >
       </template>
@@ -72,8 +81,9 @@
     </hn-table>
     <div class="demo-pagination-block">
       <el-pagination
+        v-if="isShowDate"
         layout="total, prev, pager, next"
-        :total="100"
+        :total="total"
         @current-change="handleCurrentChange"
       />
     </div>
@@ -99,6 +109,10 @@ const emits = defineEmits([
   'pageItem'
 ])
 const prop = defineProps({
+  isShowDate: {
+    type: Boolean,
+    default: true
+  },
   title: {
     type: String,
     require: true
@@ -116,12 +130,16 @@ const prop = defineProps({
     default: false
   },
   isShowTopHandle: {
-    type: Boolean,
-    default: true
+    type: Array,
+    default: ['search', 'add']
   },
   isShowButtonHandle: {
     type: Array,
     default: ['edit', 'del']
+  },
+  total: {
+    type: Number,
+    default: 100
   }
 })
 
@@ -144,8 +162,6 @@ const otherPropSlots = prop.tableOptions.map((item) => {
   return item
 })
 
-console.log(otherPropSlots)
-
 // 搜索
 const Name = ref('')
 const searchHandle = async () => {
@@ -164,14 +180,12 @@ const addHandle = () => {
 // 提交
 const sumbitValue = async (e) => {
   flag.value = 0
-  console.log(e)
   emits('sumbitItem', e)
 }
 
 //修改
 const currentHandle = (e) => {
   formData.value = e
-  console.log(e)
   emits('handleItem', e)
 }
 

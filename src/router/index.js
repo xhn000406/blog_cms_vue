@@ -37,8 +37,14 @@ const routes = [
         component: () => import('../views/edit/index.vue')
       },
       {
-        path: 'dict/artcile',
-        name: 'dictArtcile',
+        path: 'articlelist',
+        name: 'articleList',
+        component: () =>
+          import('../views/system/article/articleList/articleList.vue')
+      },
+      {
+        path: 'articletype',
+        name: 'articleTye',
         component: () => import('../views/system/article/index.vue')
       },
       {

@@ -22,3 +22,15 @@ export function UpdateUserData(id, data) {
     data
   })
 }
+
+export function getHomePageData() {
+  return httpRequest({
+    url: '/getDetailsInfo'
+  })
+}
+
+export function getVisitedData() {
+  return httpRequest({
+    url: '/getVisitedData'
+  })
+}

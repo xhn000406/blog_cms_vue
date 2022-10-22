@@ -1,23 +1,53 @@
 <template>
-  <div id="homepage">
-    <div id="useInfo"></div>
-    <div></div>
+  <div id="homePage">
+    <div class="homePage_main">
+      <div class="homePage_bottom">
+        <el-card class="box_user" shadow="hover">
+          <UserDetails></UserDetails>
+        </el-card>
+
+        <el-card class="box-card" shadow="hover">
+          <div id="detailsChart"></div>
+        </el-card>
+      </div>
+      <el-card
+        shadow="hover"
+        id="visitedChart"
+        style="display: flex; justify-content: center"
+      >
+        <div id="visitedChart"></div>
+      </el-card>
+    </div>
   </div>
 </template>
 
 <script setup>
 import * as echarts from 'echarts'
 import { onMounted, ref } from 'vue'
+import { getHomePageData, getVisitedData } from '../../../request/auth/index'
+import UserDetails from './components/userDetails.vue'
 
-onMounted(() => {
-  init()
+const detailsData = ref([])
+const visitedData = ref([])
+
+const getData = async () => {
+  const { data: res } = await getHomePageData()
+  const { data: result } = await getVisitedData()
+  detailsData.value = res
+  visitedData.value = result
+}
+
+onMounted(async () => {
+  await getData()
+  init(detailsData.value, visitedData.value)
 })
 
-function init() {
-  var myChart = echarts.init(document.getElementById('useInfo'))
-  myChart.setOption({
+function init(detailsData, visitedData) {
+  let detailsChart = echarts.init(document.getElementById('detailsChart'))
+  let visitedChart = echarts.init(document.getElementById('visitedChart'))
+  detailsChart.setOption({
     title: {
-      text: 'Referer of a Website',
+      text: '详情信息',
       left: 'center'
     },
     tooltip: {
@@ -25,16 +55,9 @@ function init() {
     },
     series: [
       {
-        name: 'Access From',
         type: 'pie',
         radius: '50%',
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
-        ],
+        data: detailsData,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -45,21 +68,77 @@ function init() {
       }
     ]
   })
+
+  visitedChart.setOption({
+    xAxis: {
+      text: '拜访数量',
+      type: 'category',
+      boundaryGap: false,
+
+      data: [
+        '星期一',
+        '星期二',
+        '星期三',
+        '星期四',
+        '星期五',
+        '星期六',
+        '星期日'
+      ]
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        itemStyle: {
+          normal: {
+            label: {
+              show: true // 在折线拐点上显示数据
+            }
+          }
+        },
+        data: visitedData,
+        type: 'line',
+        areaStyle: {}
+      }
+    ]
+  })
+
   window.onresize = function () {
-    myChart.resize()
+    detailsChart.resize()
+    visitedChart.resize()
   }
 }
 </script>
 
 <style lang="less" scoped>
-#homepage {
-  background-color: white;
+#homePage {
   border-radius: 10px;
   width: 100%;
   height: 100%;
 }
-#useInfo {
-  width: 800px;
+#detailsChart {
+  width: 400px;
   height: 400px;
+}
+#visitedChart {
+  height: 400px;
+  width: 900px;
+}
+.box-card {
+  height: 400px;
+  width: 500px;
+  display: flex;
+  justify-content: center;
+}
+.homePage_main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.homePage_bottom {
+  display: flex;
+
+  justify-content: space-around;
 }
 </style>

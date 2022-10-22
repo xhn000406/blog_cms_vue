@@ -10,7 +10,6 @@ export const useStore = defineStore('editStore', {
     async getData(id) {
       const { data: res } = await apiGetArticleData(id)
       this.article = res
-      console.log(this.article)
     }
   }
 })

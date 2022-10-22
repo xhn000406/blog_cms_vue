@@ -1,8 +1,8 @@
 import httpRequest from '@/request/index'
 
-export function apiGetRecordData() {
+export function apiGetRecordData(page) {
   return httpRequest({
-    url: '/record',
+    url: `/record?page=${page}`,
     method: 'get'
   })
 }
