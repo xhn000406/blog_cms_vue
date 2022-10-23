@@ -28,6 +28,14 @@
                   <el-radio label="0" size="small">否</el-radio>
                 </el-radio-group>
               </el-form-item>
+
+              <el-form-item label="发布" label-width="60px">
+                <el-radio-group v-model="formData.isSend" class="ml-4">
+                  <el-radio label="1" size="small">是</el-radio>
+                  <el-radio label="0" size="small">否</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
               <el-form-item label="封面" label-width="60px">
                 <el-upload
                   action="#"
@@ -62,7 +70,7 @@
 
 <script setup>
 import { Plus } from '@element-plus/icons-vue'
-
+import { ElMessage } from 'element-plus'
 import { watch, ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { apiGetData } from '../../request/dict'
@@ -88,11 +96,13 @@ const route = useRoute()
 let elUploadRef = ref()
 let avatar = ref('')
 const isSwaper = ref()
+const isSend = ref()
 const formData = ref({
   title: '',
   valueHtml: '',
   imgUrl: '',
   articleType: '',
+  isSend: '0',
   isSwaper: '0'
 })
 const editData = ref([])
@@ -118,6 +128,10 @@ const saveItem = async () => {
   await elUploadRef.value.submit()
   emits('sendData', formData.value)
   emits('update:isshow', false)
+  ElMessage({
+    message: '保存成功!',
+    type: 'success'
+  })
   if (route.query.id) {
     await apiUpdateData(route.query.id, formData.value)
   } else {
@@ -147,7 +161,7 @@ watch(
 onMounted(async () => {
   const result = await apiGetData()
   editData.value = result.data.result
-
+  console.log(result)
   if (route.query.id != undefined) {
     const id = route.query.id
     const res = await apiGetEditData(id)
@@ -162,7 +176,8 @@ onMounted(async () => {
   width: 300px;
   height: 700px;
   position: fixed;
-  background-color: gray;
+  background-color: #ffffff;
+  border: 1px solid gray;
   right: 0px;
   bottom: 100px;
   display: flex;
@@ -175,7 +190,7 @@ onMounted(async () => {
 .main {
   width: 95%;
   height: 95%;
-  background-color: red;
+
   display: flex;
   flex-direction: column;
   align-items: center;

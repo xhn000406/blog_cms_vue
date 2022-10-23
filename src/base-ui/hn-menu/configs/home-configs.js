@@ -23,7 +23,7 @@ export const MenuData = [
       {
         id: 7,
         title: '文章列表',
-        url: 'home/articleType'
+        url: 'home/articleList'
       }
     ]
   },

@@ -9,7 +9,7 @@
       @sumbit-item="sumbitItem"
       @page-item="pageItem"
       :is-show-top-handle="['', '']"
-      :isShowButtonHandle="false"
+      :isShowButtonHandle="[' ', ' ']"
       :is-show-date="false"
     >
       <template #dictName="scope">

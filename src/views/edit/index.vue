@@ -7,7 +7,7 @@
       </div>
       <!-- <div @click="btnSend"><el-button type="primary">发送</el-button></div> -->
     </div>
-    <div style="border: 1px solid #ccc">
+    <div class="editor_main">
       <Toolbar
         style="border-bottom: 1px solid #ccc"
         :editor="editorRef"
@@ -65,21 +65,27 @@ onMounted(async () => {
   }
 })
 
-const btnSend = async (e) => {
-  if (formData.value.title == undefined) {
-    console.log(formData.value)
-    alert('请输入标题')
-  } else {
-    await apiaddData(formData.value)
-  }
-}
-
 const itemIsshow = () => {
   isShow.value = !isShow.value
 }
 const toolbarConfig = {}
-const editorConfig = { placeholder: '请输入内容...' }
-
+const editorConfig = {
+  placeholder: '请输入内容...',
+  MENU_CONF: {
+    uploadImage: {
+      fieldName: 'avatar',
+      server: '/api/profile',
+      customInsert(res, insertFn) {
+        // TS 语法
+        // customInsert(res, insertFn) {                  // JS 语法
+        // res 即服务端的返回结果
+        insertFn(res.fileName)
+        // 从 res 中找到 url alt href ，然后插入图片
+      }
+    }
+  }
+}
+console.log(editorConfig)
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
   const editor = editorRef.value
@@ -106,5 +112,9 @@ const handleCreated = (editor) => {
   font-size: 24px;
   justify-content: space-between;
   margin: 20px;
+}
+.editor_main {
+  border: 1px solid #ccc;
+  height: 100%;
 }
 </style>

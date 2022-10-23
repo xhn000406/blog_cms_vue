@@ -1,92 +1,94 @@
 <template>
   <div class="pegShop">
-    <div class="banner">
-      <div class="banner_back">
-        <div class="banner_main" v-if="isShowBack">
-          <el-page-header
-            title=" "
-            @click="
-              () => {
-                router.back()
-              }
-            "
-          ></el-page-header>
+    <el-scrollbar>
+      <div class="banner">
+        <div class="banner_back">
+          <div class="banner_main" v-if="isShowBack">
+            <el-page-header
+              title=" "
+              @click="
+                () => {
+                  router.back()
+                }
+              "
+            ></el-page-header>
+          </div>
+          <h2>{{ title }}</h2>
         </div>
-        <h2>{{ title }}</h2>
+        <div class="topHandle">
+          <slot name="topHandle"></slot>
+          <div class="searchHandle" v-if="isShowTopHandle[0] == 'search'">
+            <el-input v-model="Name"></el-input
+            ><el-button type="primary" @click="searchHandle">查询</el-button>
+          </div>
+          <el-button
+            type="primary"
+            @click.prevent="addHandle"
+            v-if="isShowTopHandle[1] == 'add'"
+            >增加
+            <hn-dialog
+              v-model:formData="formData"
+              :isShowDiglog="isShowDiglog"
+              v-model:modelValue="isShowDiglog"
+              :defaultInfo="defaultInfo"
+              @sumbitValue="sumbitValue"
+              :dialogOptions="tableOptions"
+            ></hn-dialog>
+          </el-button>
+        </div>
       </div>
-      <div class="topHandle">
-        <div class="searchHandle" v-if="isShowTopHandle[0] == 'search'">
-          <el-input v-model="Name"></el-input
-          ><el-button type="primary" @click="searchHandle">查询</el-button>
-        </div>
-        <el-button
-          type="primary"
-          @click.prevent="addHandle"
-          v-if="isShowTopHandle[1] == 'add'"
-          >增加
-
-          <hn-dialog
-            v-model:formData="formData"
-            :isShowDiglog="isShowDiglog"
-            v-model:modelValue="isShowDiglog"
-            :defaultInfo="defaultInfo"
-            @sumbitValue="sumbitValue"
-            :dialogOptions="tableOptions"
-          ></hn-dialog>
-        </el-button>
-      </div>
-    </div>
-    <hn-table
-      :tableData="tableData"
-      :tableProp="tableOptions"
-      @currentValue="currentHandle"
-    >
-      <template #img="scope">
-        <div class="demo-image__preview">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="scope.row.imgUrl"
-            :initial-index="0"
-            fit="cover"
-            :preview-src-list="[scope.row.imgUrl]"
-            :z-index="999"
-          />
-        </div>
-      </template>
-
-      <template #buttonHandle="scope" v-if="isShowButtonHandle">
-        <el-button
-          type="primary"
-          v-if="isShowButtonHandle[0] == 'edit'"
-          @click="editItem(scope.row.id)"
-          >修改</el-button
-        >
-        <el-button
-          type="primary"
-          @click="deleItem(scope.row.id)"
-          v-if="isShowButtonHandle[1] == 'del'"
-          >删除</el-button
-        >
-      </template>
-
-      <template
-        v-for="item in otherPropSlots"
-        :key="item.prop"
-        #[item.slotname]="scope"
+      <hn-table
+        :tableData="tableData"
+        :tableProp="tableOptions"
+        @currentValue="currentHandle"
       >
-        <template v-if="item.slotname">
-          <slot :name="item.slotname" :row="scope.row"></slot>
+        <template #img="scope">
+          <div class="demo-image__preview">
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="scope.row.imgUrl"
+              :initial-index="0"
+              fit="cover"
+              :preview-src-list="[scope.row.imgUrl]"
+              :z-index="999"
+            />
+          </div>
         </template>
-      </template>
-    </hn-table>
-    <div class="demo-pagination-block">
-      <el-pagination
-        v-if="isShowDate"
-        layout="total, prev, pager, next"
-        :total="total"
-        @current-change="handleCurrentChange"
-      />
-    </div>
+
+        <template #buttonHandle="scope" v-if="isShowButtonHandle">
+          <el-button
+            type="primary"
+            v-if="isShowButtonHandle[0] == 'edit'"
+            @click="editItem(scope.row.id)"
+            >修改</el-button
+          >
+          <el-button
+            type="primary"
+            @click="deleItem(scope.row.id)"
+            v-if="isShowButtonHandle[1] == 'del'"
+            >删除</el-button
+          >
+        </template>
+
+        <template
+          v-for="item in otherPropSlots"
+          :key="item.prop"
+          #[item.slotname]="scope"
+        >
+          <template v-if="item.slotname">
+            <slot :name="item.slotname" :row="scope.row"></slot>
+          </template>
+        </template>
+      </hn-table>
+      <div class="demo-pagination-block">
+        <el-pagination
+          v-if="isShowDate"
+          layout="total, prev, pager, next"
+          :total="total"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 

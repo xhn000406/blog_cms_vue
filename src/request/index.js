@@ -37,11 +37,11 @@ service.interceptors.response.use(
     const dataAxios = response
     // 这个状态码是和后端约定的
     const code = dataAxios.reset
-    ElNotification({
-      title: 'Success',
-      message: '数据改变',
-      type: 'success'
-    })
+    // ElNotification({
+    //   title: 'Success',
+    //   message: '数据改变',
+    //   type: 'success'
+    // })
     return dataAxios
   },
   function (error) {
